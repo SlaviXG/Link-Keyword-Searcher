@@ -14,7 +14,7 @@ List of keywords given via command line interface.
 ## Underneath:
 - Read from the text fie all the links to search the information in.
 - For each process consider the list of keywords and open a separate tab.
-- In this tab, iterate through the lis of keywords and save the matching search results.
+- In this tab, iterate through the list of keywords and save the matching search results.
 - Return all the search results.
 - Save all the search results to a separate file.
 
