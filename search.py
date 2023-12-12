@@ -1,4 +1,5 @@
 import argparse
+import multiprocessing
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from search_result import SearchResult
@@ -6,7 +7,13 @@ from search_result import SearchResult
 
 def read_file(file_path):
     with open(file_path, 'r') as file:
-        return [line.strip() for line in file.readlines()]
+        lines = []
+        for line in file.readlines():
+            line_strip = line.strip()
+            if line_strip != '':
+                lines.append(line_strip)
+
+        return lines
 
 
 def search_keyword_in_page(driver, keyword):
@@ -42,23 +49,39 @@ def initialize_driver(web_driver, driver_path):
         raise ValueError("Unsupported web driver specified")
 
 
-def run_keyword_searcher(links_file: str, keywords_file: str, results_file: str, web_driver: str, driver_path: str = None):
+def process_link(link, keywords, web_driver, driver_path):
+    driver = initialize_driver(web_driver, driver_path)
+    results = {}
+    driver.get(link)
+    driver.implicitly_wait(5)
+
+    for keyword in keywords:
+        results[keyword] = search_keyword_in_page(driver, keyword)
+
+    driver.quit()
+    return results
+
+
+def run_keyword_searcher(links_file: str,
+                         keywords_file: str,
+                         results_file: str,
+                         web_driver: str,
+                         driver_path: str = None):
+
     links = read_file(links_file)
     keywords = read_file(keywords_file)
 
-    driver = initialize_driver(web_driver, driver_path)
+    num_processes = min(multiprocessing.cpu_count(), len(links))
+
+    with multiprocessing.Pool(num_processes) as pool:
+        results = pool.starmap(process_link, [(link, keywords, web_driver, driver_path) for link in links])
 
     all_results = {}
-    for link in links:
-        driver.get(link)
-        driver.implicitly_wait(5)  # Adjust based on page load time
-
-        for keyword in keywords:
+    for result in results:
+        for keyword, keyword_results in result.items():
             if keyword not in all_results:
                 all_results[keyword] = []
-            all_results[keyword].extend(search_keyword_in_page(driver, keyword))
-
-    driver.quit()
+            all_results[keyword].extend(keyword_results)
 
     with open(results_file, 'w') as file:
         for keyword, results in all_results.items():
@@ -68,6 +91,8 @@ def run_keyword_searcher(links_file: str, keywords_file: str, results_file: str,
             file.write("\n")
 
     print(f"Search completed. Results saved to {results_file}")
+
+    return all_results
 
 
 def main():
