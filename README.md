@@ -4,7 +4,7 @@ This is a tool which allows to search the information quickly in the multiple li
 
 To install the necessary requirements, run the following command:
 
-`pip install -r requirments.txt`
+`pip install -r requirements.txt`
 
 # Interface:
 
