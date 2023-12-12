@@ -22,7 +22,8 @@ lines of th files according to the search you'd like to perform.
 # Interface:
 
 ## Input:
-List of keywords given in text file, which is specified via command line interface.
+List of keywords given in text file (by default: keywords.txt) among the links given in text file (by default: links.txt). 
+The file paths can be specified via command line interface.
 
 ## Underneath:
 - Read from the text fie all the links to search the information in.
@@ -33,6 +34,6 @@ List of keywords given in text file, which is specified via command line interfa
 
 ## Output:
 Dictionary of the possible results, where key is a keyword and value is a list of the results.
-The results are saved to a text file as well.
+The results are saved to a text file as well (by default: results.txt).
 
 
