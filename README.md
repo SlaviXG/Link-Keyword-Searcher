@@ -12,6 +12,13 @@ This is a tool which allows to search the information quickly in the multiple li
 
 *It's important that the WebDriver version matches your browser version to ensure compatibility.*
 
+- In this directory (if not created), create `keywords.txt` and `links.txt` files, and add the keywords and the links as
+lines of th files according to the search you'd like to perform.
+- Run the program with specifying the configuration:
+
+`python search.py`
+`python search.py --webdriver=chrome`
+
 # Interface:
 
 ## Input:

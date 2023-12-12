@@ -12,14 +12,18 @@ def read_file(file_path):
 def search_keyword_in_page(driver, keyword):
     results = []
     try:
-        paragraphs = driver.find_elements(By.TAG_NAME, 'p')
-        for paragraph in paragraphs:
-            if keyword.lower() in paragraph.text.lower():
+        keyword_lower = keyword.lower()
+        xpath_expression = f"//*[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'{keyword_lower}')]"
+        elements = driver.find_elements(By.XPATH, xpath_expression)
+
+        for element in elements:
+            if element.text.strip() != '':
                 results.append(SearchResult(
                     page_title=driver.title,
                     page_link=driver.current_url,
-                    paragraph_text=paragraph.text
+                    paragraph_text=element.text
                 ))
+
     except Exception as e:
         print(f"Error searching keyword '{keyword}' in page: {e}")
     return results
