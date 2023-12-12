@@ -2,9 +2,15 @@
 
 This is a tool which allows to search the information quickly in the multiple links.
 
-To install the necessary requirements, run the following command:
+- Install the necessary dependencies, run the following command:
 
 `pip install -r requirements.txt`
+
+- Download and install the correct version of the web driver:
+  - [Chrome](https://sites.google.com/chromium.org/driver/downloads)
+  - [Edge](https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/)
+
+*It's important that the WebDriver version matches your browser version to ensure compatibility.*
 
 # Interface:
 
